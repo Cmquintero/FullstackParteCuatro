@@ -54,10 +54,20 @@ app.get("/api/persons/5", (request, response) => {
     response.status(404).end();
   }
 });
+app.get("/api/notes/:id", (request, response) => {
+  const id = Number(request.params.id);
+  const note = notes.find((note) => note.id === id);//crei que funcionaba igual que el.filter pero en realidad en esta linea busco solo un id mas no creo un array nuevo eliminando el elemento como lo hago en(*)
+
+  if (note) {
+    response.json(note);
+  } else {
+    response.status(404).end();
+  }
+}); 
 
 app.delete("/api/notes/:id", (request, response) => {
   const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);
+  notes = notes.filter((note) => note.id !== id);//(*)
   response.send(`The person with id: ${id} has been delete`);
   response.status(204).end();
 });
@@ -77,7 +87,7 @@ app.post("/api/persons", (request, response) => {
   if (notes.some(note => note.name === body.name)) {
     return response.status(400).json({
       error: "The name has been exist in the list"
-    });
+    }); //metodo para 
   }
   const generateRandomId = () => {
     let id
