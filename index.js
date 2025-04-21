@@ -31,6 +31,17 @@ app.get("/api/persons/", (request, response) => {
   response.send(notes);
 });
 
+const info = () => {
+  const total = notes.length;
+  const date = new Date();
+  return `
+    <p>Phonebook has info for ${total} people</p>
+    <p>${date}</p>
+  `
+};
+app.get("/api/info", (request, response) => {
+  response.send(info());
+});
 
 
 const PORT = 3001;
