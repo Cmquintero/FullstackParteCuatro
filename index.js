@@ -61,7 +61,42 @@ app.delete("/api/notes/:id", (request, response) => {
   response.send(`The person with id: ${id} has been delete`);
   response.status(204).end();
 });
+const generateId = () => {
+  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
+  return maxId + 1;
+};
 
+app.post("/api/persons", (request, response) => {
+  const body = request.body;
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: "name or number missing",
+    });
+  }
+  if (notes.some(note => note.name === body.name)) {
+    return response.status(400).json({
+      error: "The name has been exist in the list"
+    });
+  }
+  const generateRandomId = () => {
+    let id
+    do {
+      id = Math.round(Math.random() * 1000000)//redonde ya que intente usar el ceil pero falle sin pensar que debia usar era 999999 y use el floor pero me parecia poco util decir si hacia arriba o a abajo
+    } while (notes.some(n => n.id === id))
+    return id
+  }
+  const note = {
+    id: generateRandomId(),
+    content: body.content,
+    important: Boolean(body.important) || false,
+
+  };
+
+  notes = notes.concat(note);
+
+  response.json(note);
+});
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
