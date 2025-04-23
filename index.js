@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
+const morgan = require('morgan')
+app.use(morgan("tiny"));
 
 let notes = [
   {
@@ -29,6 +31,16 @@ let notes = [
     number: "3151451241",
   },
 ];
+
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
 
 app.get("/api/persons/", (request, response) => {
   response.send(notes);
@@ -87,7 +99,7 @@ app.post("/api/persons", (request, response) => {
   if (notes.some(note => note.name === body.name)) {
     return response.status(400).json({
       error: "The name has been exist in the list"
-    }); //metodo para 
+    }); //metodo para el manejo de errores 
   }
   const generateRandomId = () => {
     let id
@@ -107,7 +119,14 @@ app.post("/api/persons", (request, response) => {
 
   response.json(note);
 });
+
+
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
