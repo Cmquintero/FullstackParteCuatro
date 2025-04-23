@@ -3,6 +3,10 @@ const app = express();
 app.use(express.json());
 const morgan = require('morgan')
 app.use(morgan("tiny"));
+morgan.token('request-body',(request)=>{
+  return request.method === 'POST' ? JSON.stringify(request.body) : '';
+})
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :request-body"));
 
 let notes = [
   {
@@ -110,23 +114,22 @@ app.post("/api/persons", (request, response) => {
   }
   const note = {
     id: generateRandomId(),
-    content: body.content,
-    important: Boolean(body.important) || false,
-
+    name: body.name,
+    number: body.number,
   };
-
+  
   notes = notes.concat(note);
 
   response.json(note);
 });
 
-
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
