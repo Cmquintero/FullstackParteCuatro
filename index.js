@@ -7,6 +7,7 @@ app.use(express.static("dist"))
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
+const PORT = process.env.PORT || 3001;
 morgan.token("request-body", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : "";
 });
@@ -142,7 +143,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
