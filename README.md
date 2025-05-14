@@ -24,3 +24,11 @@ Parte3 ejercicio 3.8"
 para acceder a la lista de personas usaremos "https://fullstackpartetres.onrender.com/api/persons"Cabe aclarar que faltan unas personas que 
 agregue en los siguientes commits,ademas use esta parte de los ejercicios osea el commit en especifico por que en los siguientes commits tengo el 
 front en este modulo pero luego pensare como enviar los commits y ignorar el frond en render
+
+# Ejercicio 3.14:
+no se si algun desarrollador o colaborar de este proyecto este revisando el desarrollo del proyecto desconozco esto pero me pregunto si los commits como los realizo son correctos ya que modifique 
+el archivo en la parte dos para que funcionara con este pero no puedo realizar commits para ese repo despues de la entrega entonces se analizara lo de aca o deberia mover la parte dos del proyecto 
+o simplemente enviar in push con todas las carpetas algo para mi mas pesado y complicado o simplemente agregar el backend y el front en la misma carpeta 
+
+# Ejercicio 3.15:
+Este ejercicio me hizo cometer un error fatal con mi repositorio espero sea valido se que en a parte uno se explica que lo mas importante es el envio final pero me gusta tener en orden mis cosas y enviava parte por parte pero en este caso tras querer mover y enviar el backend de un solo envio hice un forced push ya que me pedia un pull pero no me fije en ese pull ya que no queria traer cambios de remoto a local sin embargo el forced push creo que borro todos mis commits anteriores y por ello perdi los commits anteriores esta parte del curso me ha enseñado a los golpes el manejo y el envio

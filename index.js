@@ -1,13 +1,16 @@
+require('dotenv').config()
 const express = require("express");
 const app = express();
-app.use(express.json());
+app.use(express.static('build'))
+app.use(express.json())
 const morgan = require('morgan')
 app.use(morgan("tiny"));
 app.use(express.static("dist"))
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
-const PORT = process.env.PORT || 3001;
+
+const PORT = process.env.PORT
 morgan.token("request-body", (request) => {
   return request.method === "POST" ? JSON.stringify(request.body) : "";
 });
@@ -17,6 +20,22 @@ app.use(
   )
 );
 
+const url = process.env.MONGODB_URI
+
+const mongoose = require('mongoose')
+const Person = require('./models/person')
+const password = process.argv[2]
+const name = process.argv[3]
+const number = process.argv[4]
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
+
+
+/*
 let notes = [
   {
     id: 1,
@@ -49,6 +68,7 @@ let notes = [
     number:"25/24/25",
   },
 ];
+*/
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -58,12 +78,15 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(requestLogger)
+app.use(requestLogger) //importado al final como debe ser en la documentacion 
 
-app.get("/api/persons/", (request, response) => {
-  response.send(notes);
-});
+app.get('/api/persons', (request, response) => {
+  Person.find({}).then(persons => {
+    response.json(persons)
+  })
+})
 
+/*
 const info = () => {
   const total = notes.length;
   const date = new Date();
@@ -84,57 +107,64 @@ app.get("/api/persons/5", (request, response) => {
     response.status(404).end();
   }
 });
-app.get("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const note = notes.find((note) => note.id === id);//crei que funcionaba igual que el.filter pero en realidad en esta linea busco solo un id mas no creo un array nuevo eliminando el elemento como lo hago en(*)
 
-  if (note) {
-    response.json(note);
-  } else {
-    response.status(404).end();
-  }
-}); 
 
-app.delete("/api/notes/:id", (request, response) => {
-  const id = Number(request.params.id);
-  notes = notes.filter((note) => note.id !== id);//(*)
-  response.send(`The person with id: ${id} has been delete`);
-  response.status(204).end();
-});
+
 const generateId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
   return maxId + 1;
-};
+};*/
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
 
+  const person = {
+    content: body.content,
+    important: body.important,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+})
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(() => response.status(204).end())
+    .catch(error => next(error))
+});
+
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+
+    .catch(error => next(error))
+})
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: "name or number missing",
-    });
+if (!body.name || !body.number) {
+  return response.status(400).json({ error: "name or number missing" });
+}
+Person.findOne({ name: body.name }).then(existingPerson => {
+  if (existingPerson) {
+    return response.status(400).json({ error: "The name already exists in the database" });
   }
-  if (notes.some(note => note.name === body.name)) {
-    return response.status(400).json({
-      error: "The name has been exist in the list"
-    }); //metodo para el manejo de errores 
-  }
-  const generateRandomId = () => {
-    let id
-    do {
-      id = Math.round(Math.random() * 1000000)//redonde ya que intente usar el ceil pero falle sin pensar que debia usar era 999999 y use el floor pero me parecia poco util decir si hacia arriba o a abajo
-    } while (notes.some(n => n.id === id))
-    return id
-  }
-  const note = {
-    id: generateRandomId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  };
-  
-  notes = notes.concat(note);
+  });
 
-  response.json(note);
+  person.save().then(savedPerson => {
+    response.json(savedPerson);
+    
+  }).catch(error => next(error));
+});
 });
 
 const unknownEndpoint = (request, response) => {
@@ -143,7 +173,18 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
