@@ -192,15 +192,26 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } else if (error.name === 'ValidationError') {
-    /*
-    return response.status(400).json({ error: error.message })// esta linea deberia enviar el propio mensaje predeterminado devuelto por Mongoose pero no es muy estetico asi que la cambie  
-    */
-   return response.status(400).json({ error: "The name must have at least 3 characters and the number 11 digits" })
   }
+
+  if (error.name === 'ValidationError') {
+    const messages = []
+
+    if (error.errors.name) {
+      messages.push("The name must have at least 3 characters.")
+    }
+
+    if (error.errors.number) {
+      messages.push("The number must be at least 8 digits and in the format XX-XXXXXXX.")
+    }
+
+    return response.status(400).json({ error: messages.join(' ') })
+  }
+
 
   next(error)
 }
+
 
 app.use(errorHandler)
 
