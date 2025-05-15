@@ -5,7 +5,6 @@ app.use(express.static('build'))
 app.use(express.json())
 const morgan = require('morgan')
 app.use(morgan("tiny"));
-app.use(express.static("dist"))
 const cors = require('cors')
 app.use(cors())
 app.use(express.static('dist'))
@@ -115,36 +114,36 @@ const generateId = () => {
   return maxId + 1;
 };*/
 app.put('/api/persons/:id', (request, response, next) => {
-  const body = request.body
+  const { id } = request.params
+  const { name, number } = request.body
 
   const person = {
-    name: body.name,
-    number: body.number,
+    name,
+    number,
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+  Person.findByIdAndUpdate(id, person, {
+    new: true,
+    runValidators: true,
+    context: 'query'
+  })
     .then(updatedPerson => {
-      response.json(updatedPerson)
+      if (updatedPerson) {
+        response.json(updatedPerson)
+      } else {
+        response.status(404).end()
+      }
     })
     .catch(error => next(error))
 })
+
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(() => response.status(204).end())
     .catch(error => next(error))
 });
 
-app.put('/api/persons/:id', (request, response, next) => {
-   const {id} = request.params
-   const {number} = request.body
-   Person.findByIdAndDelete(id,{number},{new:true}).then((updatedPerson)=>{
-    if(updatedPerson){
-      response.json(updatedPerson)
-    }else{
-      response.status(400).end()
-    }
-   }).catch(error => next(error))
-  })
+
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
@@ -158,7 +157,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
     .catch(error => next(error))
 })
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response,next) => {
   const body = request.body;
 if (!body.name || !body.number) {
   return response.status(400).json({ error: "name or number missing" });
@@ -175,9 +174,11 @@ Person.findOne({ name: body.name }).then(existingPerson => {
   person.save().then(savedPerson => {
     response.json(savedPerson);
     
-  }).catch(error => next(error));
+  }).catch(error => next(error))
+}).catch(error => next(error))
 });
-});
+
+
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -185,18 +186,24 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  } else if (error.name === 'ValidationError') {
+    /*
+    return response.status(400).json({ error: error.message })// esta linea deberia enviar el propio mensaje predeterminado devuelto por Mongoose pero no es muy estetico asi que la cambie  
+    */
+   return response.status(400).json({ error: "The name must have at least 3 characters and the number 11 digits" })
+  }
 
   next(error)
 }
 
 app.use(errorHandler)
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

@@ -17,9 +17,18 @@ mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    required: true,
+    minLength: 4
+  },
+  number: {
+    type: String,
+    required: true,
+    minLength: 11
+  }a
 })
+
 
 /*note.save().then(result => {
   console.log('note saved!')
