@@ -32,3 +32,7 @@ o simplemente enviar in push con todas las carpetas algo para mi mas pesado y co
 
 # Ejercicio 3.15:
 Este ejercicio me hizo cometer un error fatal con mi repositorio espero sea valido se que en a parte uno se explica que lo mas importante es el envio final pero me gusta tener en orden mis cosas y enviava parte por parte pero en este caso tras querer mover y enviar el backend de un solo envio hice un forced push ya que me pedia un pull pero no me fije en ese pull ya que no queria traer cambios de remoto a local sin embargo el forced push creo que borro todos mis commits anteriores y por ello perdi los commits anteriores esta parte del curso me ha enseñado a los golpes el manejo y el envio
+
+# Ejercicio 3.21:
+Ejercicio sencillo con la conexion dek back el front y todo moviendolo a un solo puerto ya que antes el front trabajaba en el puerto "5173" mientras que el back en el "3001" el cual era el optimo 
+fue sencillo unir ambos pasando el build al back y archivos necesarios y moviendo el "app.use(express.static("dist"))" para que funcionara, me costo mas fue el render lo cual siempre me da problemas ya que muchas veces no se que son los errores y tengo que buscar documentacion o algun video de youtube pero nada que no se pueda arreglar con varios intentos y dedicacion

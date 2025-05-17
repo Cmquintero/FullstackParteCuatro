@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require("express");
 const app = express();
 app.use(express.static('build'))
@@ -218,3 +218,4 @@ app.use(errorHandler)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
