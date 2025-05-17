@@ -7,7 +7,7 @@ const morgan = require('morgan')
 app.use(morgan("tiny"));
 const cors = require('cors')
 app.use(cors())
-app.use(express.static('dist'))
+app.use(express.static("dist"))
 
 const PORT = process.env.PORT
 morgan.token("request-body", (request) => {
