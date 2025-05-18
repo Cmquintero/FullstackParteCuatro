@@ -14,7 +14,6 @@ const getAll = () => {
     }
   return request.then((response) => response.data.concat(nonExisting))
 }*/
-   
 const create = newObject => {
   const request = axios.post(baseUrl, newObject)
   return request.then(response => response.data)
@@ -30,4 +29,4 @@ const remove = id => {
 }
 
 export default { getAll, create, update, remove }
-//el código que maneja la comunicación con el backend 
+//el código que maneja la comunicación con el backend

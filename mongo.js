@@ -25,11 +25,11 @@ mongoose.connect(url)
 })
 */
 
-const Person = mongoose.model('Person', personSchema)
+const Person = mongoose.model('Person')
 if (process.argv.length === 3) {
 
   Person.find({}).then(result => {
-    console.log("Persons:")
+    console.log('Persons:')
     result.forEach(person => {
       console.log(`${person.name} ${person.number}`)
     })

@@ -36,3 +36,6 @@ Este ejercicio me hizo cometer un error fatal con mi repositorio espero sea vali
 # Ejercicio 3.21:
 Ejercicio sencillo con la conexion dek back el front y todo moviendolo a un solo puerto ya que antes el front trabajaba en el puerto "5173" mientras que el back en el "3001" el cual era el optimo 
 fue sencillo unir ambos pasando el build al back y archivos necesarios y moviendo el "app.use(express.static("dist"))" para que funcionara, me costo mas fue el render lo cual siempre me da problemas ya que muchas veces no se que son los errores y tengo que buscar documentacion o algun video de youtube pero nada que no se pueda arreglar con varios intentos y dedicacion
+
+# Ejercicio 3.22:
+Ultimo ejercicio de la parte 3 Ejercicio que me complico ya que la documentacion no me ofrecio los modulos indicados en la version de lint es decir en export module no se debia usar por que no se soportaba ese formato ya que fue actualizado  .eslintignore ya no es soportado por esta version se utiliza eslint.config.mjs en vez de .eslintrc.js por ello en tanto intento busqueda de documentacion y ayuda de la IA pude hacerlo funcionar y me asuste al ver que mi codigo tenia 4376 errores y me di cuenta que faltaba el ignore dist logre completar esta parte fue la que mas me costo por que erorres minimos generaban gigan

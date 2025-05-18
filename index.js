@@ -1,31 +1,32 @@
-require('dotenv').config();
-const express = require("express");
-const app = express();
+require('dotenv').config()
+const express = require('express')
+const app = express()
 app.use(express.static('build'))
 app.use(express.json())
 const morgan = require('morgan')
-app.use(morgan("tiny"));
+app.use(morgan('tiny'))
 const cors = require('cors')
 app.use(cors())
-app.use(express.static("dist"))
+app.use(express.static('dist'))
 
 const PORT = process.env.PORT
-morgan.token("request-body", (request) => {
-  return request.method === "POST" ? JSON.stringify(request.body) : "";
-});
+morgan.token('request-body', (request) => {
+  return request.method === 'POST' ? JSON.stringify(request.body) : ''
+})
 app.use(
   morgan(
-    ":method :url :status :res[content-length] - :response-time ms :request-body"
+    ':method :url :status :res[content-length] - :response-time ms :request-body'
   )
-);
+)
 
 const url = process.env.MONGODB_URI
 
 const mongoose = require('mongoose')
 const Person = require('./models/person')
+/*
 const password = process.argv[2]
 const name = process.argv[3]
-const number = process.argv[4]
+const number = process.argv[4]*/
 
 // DO NOT SAVE YOUR PASSWORD TO GITHUB!!
 
@@ -77,7 +78,7 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(requestLogger) //importado al final como debe ser en la documentacion 
+app.use(requestLogger) //importado al final como debe ser en la documentacion
 
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
@@ -141,7 +142,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(() => response.status(204).end())
     .catch(error => next(error))
-});
+})
 
 
 
@@ -157,26 +158,26 @@ app.get('/api/persons/:id', (request, response, next) => {
 
     .catch(error => next(error))
 })
-app.post("/api/persons", (request, response,next) => {
-  const body = request.body;
-if (!body.name || !body.number) {
-  return response.status(400).json({ error: "name or number missing" });
-}
-Person.findOne({ name: body.name }).then(existingPerson => {
-  if (existingPerson) {
-    return response.status(400).json({ error: "The name already exists in the database" });
+app.post('/api/persons', (request, response, next) => {
+  const body = request.body
+  if (!body.name || !body.number) {
+    return response.status(400).json({ error: 'name or number missing' })
   }
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  });
+  Person.findOne({ name: body.name }).then(existingPerson => {
+    if (existingPerson) {
+      return response.status(400).json({ error: 'The name already exists in the database' })
+    }
+    const person = new Person({
+      name: body.name,
+      number: body.number,
+    })
 
-  person.save().then(savedPerson => {
-    response.json(savedPerson);
-    
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    }).catch(error => next(error))
   }).catch(error => next(error))
-}).catch(error => next(error))
-});
+})
+
 
 
 
@@ -198,11 +199,11 @@ const errorHandler = (error, request, response, next) => {
     const messages = []
 
     if (error.errors.name) {
-      messages.push("The name must have at least 3 characters.")
+      messages.push('The name must have at least 3 characters.')
     }
 
     if (error.errors.number) {
-      messages.push("The number must be at least 8 digits and in the format XX-XXXXXXX.")
+      messages.push('The number must be at least 8 digits and in the format XX-XXXXXXX.')
     }
 
     return response.status(400).json({ error: messages.join(' ') })
@@ -216,6 +217,6 @@ const errorHandler = (error, request, response, next) => {
 app.use(errorHandler)
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  console.log(`Server running on port ${PORT}`)
+})
 
