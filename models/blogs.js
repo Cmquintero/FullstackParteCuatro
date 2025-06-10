@@ -34,10 +34,10 @@ const blogSchema = new mongoose.Schema({
       message: (props) => `${props.value} must start with 'https://'`,
     },
   },
-  upvote: {
+  upvoted: {
     type: Number,
     required: true,
-    min: [1, 'Upvote must be 1 or more '],
+    min: [1, 'upvoted must be 1 or more '],
   },
 })
 

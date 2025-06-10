@@ -1,10 +1,9 @@
 POST http://localhost:3003/api/blogs
-
 Content-Type: application/json
 
 {
-  "autor": "Carlos",
+  "author": "Carlos",
   "title": "Mi primer blog",
-  "link": "https://example.com/mi-primer-blog",
-  "upvote": 0
+  "link": "https://blog.com",
+  "upvoted": 3
 }
