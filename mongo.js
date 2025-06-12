@@ -22,15 +22,15 @@ mongoose.connect(url)
       return Blog.find({}).then(result => {
         console.log('Blogs:')
         result.forEach(blog => {
-          console.log(`${blog.author} - ${blog.title} (${blog.upvoted} likes)\n${blog.link}`)
+          console.log(`${blog.author} - ${blog.title} (${blog.likes} likes)\n${blog.link}`)
         })
         return mongoose.connection.close()
       })
     } else {
-      const blog = new Blog({ author, title, link, upvoted })
+      const blog = new Blog({ author, title, link, likes })
 
       return blog.save().then(() => {
-        console.log(`Added blog "${title}" by ${author} with link "${link}" and ${upvoted} likes`)
+        console.log(`Added blog "${title}" by ${author} with link "${link}" and ${likes} likes`)
         return mongoose.connection.close()
       })
     }

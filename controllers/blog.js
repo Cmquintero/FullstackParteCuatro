@@ -21,11 +21,11 @@ blogRouter.get('/:id', (request, response, next) => {
 
 // POST new blog
 blogRouter.post('/', (request, response, next) => {
-  console.log('Body recibido:', request.body)
+  console.log('Body in:', request.body)
 
   const body = request.body
 
-  if (!body.author || !body.title || !body.link || body.upvote === undefined) {
+  if (!body.author || !body.title || !body.link || body.likes === undefined) {
     return response
       .status(400)
       .json({ error: 'author, title, link or upvote are missing' })
@@ -43,7 +43,7 @@ blogRouter.post('/', (request, response, next) => {
         author: request.body.author,
         title: request.body.title,
         link: request.body.link,
-        upvoted: request.body.upvoted,
+        likes: request.body.likes,
       })
       blog
         .save()
@@ -55,13 +55,13 @@ blogRouter.post('/', (request, response, next) => {
 
 // PUT update blog by ID
 blogRouter.put('/:id', (request, response, next) => {
-  const { author, title, link, upvoted } = request.body
+  const { author, title, link, likes } = request.body
 
   const updatedBlog = {
     author,
     title,
     link,
-    upvoted,
+    likes,
   }
 
   Blog.findByIdAndUpdate(request.params.id, updatedBlog, {
