@@ -29,7 +29,7 @@ describe("total likes", () => {
     assert.strictEqual(result, 5)
   })
 
-  test("The list of blogs has these likes:", () => {
+  test("The list of blogs has likes", () => {
     const blogs = [
       {
         _id: "1",
@@ -49,7 +49,7 @@ describe("total likes", () => {
       },
     ]
     const result = listHelper.totalLikes(blogs)
-    assert.strictEqual(result)
+    assert.strictEqual(result,10)
   })
 })
 
@@ -117,7 +117,7 @@ describe("most blogs", () => {
       {
         _id: "1",
         title: "Andrew day",
-        author: "Andrew ",
+        author: "Andrew",
         url: "https://urlblogex.com",
         likes: 2,
         __v: 0,
@@ -125,7 +125,7 @@ describe("most blogs", () => {
     ]
     const result = listHelper.mostBlogs(blogs)
     assert.deepStrictEqual(result, {
-      author: "Andrew X",
+      author: "Andrew",
       blogs: 1,
     })
   })
@@ -140,7 +140,7 @@ describe("most blogs", () => {
     const result = listHelper.mostBlogs(blogs)
     assert.deepStrictEqual(result, {
       author: "Alice",
-      blogs: 2,
+      blogs: 3,
     })
   })
 })
@@ -171,7 +171,7 @@ describe("most likes", () => {
 
   test("of a bigger list returns the author with most total likes", () => {
     const blogs = [
-      { _id: "1", title: "Ana-lizando ", author: "Ana", url: "https://urlblogex.com", likes: 10 },
+      { _id: "1", title: "Ana-lizando", author: "Ana", url: "https://urlblogex.com", likes: 10 },
       { _id: "2", title: "error", author: "Ben", url: "https://urlblogex.com", likes: 5 },
       { _id: "3", title: "The bomb", author: "Ana", url: "https://urlblogex.com", likes: 7 },
     ]
