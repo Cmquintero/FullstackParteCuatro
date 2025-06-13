@@ -2,10 +2,13 @@ const { request } = require('express')
 const Blog = require('../models/blogs')
 const blogRouter = require('express').Router()
 
-// GET all blogs
-blogRouter.get('/', (request, response) => {
-  Blog.find({}).then((blogs) => response.json(blogs))
+
+blogRouter.get('/', async (request, response) => {
+  const blogs = await Blog.find({})
+  console.log('operation returned the following blogs', blogs)
+  response.json(blogs)
 })
+
 // GET blog by ID
 blogRouter.get('/:id', (request, response, next) => {
   Blog.findById(request.params.id)
@@ -25,7 +28,7 @@ blogRouter.post('/', (request, response, next) => {
 
   const body = request.body
 
-  if (!body.author || !body.title || !body.link || body.likes === undefined) {
+  if (!body.author || !body.title || !body.url || body.likes === undefined) {
     return response
       .status(400)
       .json({ error: 'author, title, link or upvote are missing' })
@@ -42,7 +45,7 @@ blogRouter.post('/', (request, response, next) => {
       const blog = new Blog({
         author: request.body.author,
         title: request.body.title,
-        link: request.body.link,
+        url: request.body.url,
         likes: request.body.likes,
       })
       blog
@@ -55,12 +58,12 @@ blogRouter.post('/', (request, response, next) => {
 
 // PUT update blog by ID
 blogRouter.put('/:id', (request, response, next) => {
-  const { author, title, link, likes } = request.body
+  const { author, title, url, likes } = request.body
 
   const updatedBlog = {
     author,
     title,
-    link,
+    url,
     likes,
   }
 

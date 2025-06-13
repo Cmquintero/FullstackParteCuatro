@@ -24,7 +24,7 @@ const blogSchema = new mongoose.Schema({
     required: [true, 'author is required'],
     minLength: [4, 'author name min 4 letters '],
   },
-  link: {
+  url: {
     type: String,
     required: [true, 'Link is required'],
     validate: {
