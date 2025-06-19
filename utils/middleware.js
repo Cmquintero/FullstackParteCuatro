@@ -15,23 +15,12 @@ const unknownEndpoint = (request, response) => {
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message)
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  }
+  
+if (error.name === 'ValidationError') {
+  const messages = Object.values(error.errors).map(err => err.message)
+  return response.status(400).json({ error: messages.join(' ') })
+}
 
-  if (error.name === 'ValidationError') {
-    const messages = []
-
-    if (error.errors.name) {
-      messages.push('The name must have at least 3 characters.')
-    }
-
-    if (error.errors.number) {
-      messages.push('The number must be at least 8 digits and in the format XX-XXXXXXX.')
-    }
-
-    return response.status(400).json({ error: messages.join(' ') })
-  }
 
   next(error)
 }

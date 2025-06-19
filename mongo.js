@@ -50,5 +50,6 @@ test('the first note is about HTTP methods', async () => {
   const response = await api.get('/api/notes')
 
   const contents = response.body.map(e => e.content)
+
   assert(contents.includes('HTML is easy'))
 })

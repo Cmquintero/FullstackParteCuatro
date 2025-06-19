@@ -4,7 +4,7 @@ const listHelper = require("../utils/list_helper")
 
 test("dummy returns one", () => {
   const blogs = []
-  const result = listHelper.dummy(blogs)
+  const result = listHelper.dummy(blogs)  
   assert.strictEqual(result, 1)
 })
 
@@ -175,6 +175,8 @@ describe("most likes", () => {
       { _id: "2", title: "error", author: "Ben", url: "https://urlblogex.com", likes: 5 },
       { _id: "3", title: "The bomb", author: "Ana", url: "https://urlblogex.com", likes: 7 },
     ]
+
+
     const result = listHelper.mostLikes(blogs)
     assert.deepStrictEqual(result, {
       author: "Ana",
