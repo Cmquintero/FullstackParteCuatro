@@ -1,5 +1,6 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blogs')
+const User = require('../models/user')
 
 blogRouter.get('/', async (request, response, next) => {
   try {
@@ -26,9 +27,9 @@ blogRouter.get('/:id', async (request, response, next) => {
 
 blogRouter.post('/', async (request, response, next) => {
   try {
-    const { author, title, url, likes } = request.body
+    const { author, title, url, likes,userId } = request.body
 
-    if (!author || !title || !url) {
+    if (!author || !title || !url || !userId) {
       return response.status(400).json({ error: 'author, title or url are missing' })
     }
 
@@ -36,15 +37,22 @@ blogRouter.post('/', async (request, response, next) => {
     if (existing) {
       return response.status(400).json({ error: 'The blog already exists in the database' })
     }
+     const user = await User.findById(userId)
+    if (!user) {
+      return response.status(400).json({ error: 'Invalid userId' })
+    }
 
     const blog = new Blog({
       author,
       title,
       url,
       likes: likes ?? 0, 
+      user: user._id
     })
 
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
     response.status(201).json(savedBlog)
   } catch (error) {
     next(error)

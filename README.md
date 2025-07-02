@@ -16,4 +16,4 @@ use DEEPL traductor para escribir los mensajes del TEST
 
 # Ejercicio 4.8-4.12
 Ejercicios que me parecieron sencillos sabiendo que poco a poco los iba realizando con lo que me iba mostrando la documentacion 
-solo es de pensar donde debe ir cada bloque de codigo para no confundir 
+solo es de pensar donde debe ir cada bloque de codigo para no confundir el archivo dentro de las carpetas como test,utils y revisar cada rato el test 
