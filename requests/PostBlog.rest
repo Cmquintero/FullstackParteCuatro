@@ -1,9 +1,11 @@
 POST http://localhost:3003/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNhcmxvc2RldiIsImlkIjoiNjg2NjFkMjE4YmUyYjk3ZTU3NzQwMmYyIiwiaWF0IjoxNzUxNTI2OTY3fQ.OGH4yJ-2YOdIHvhOcFhVrXlaZOyAvxGiwImieHbNVbo
 Content-Type: application/json
 
 {
-  "author": "Carlos",
-  "title": "Mi primer blog",
-  "link": "https://blog.com",
-  "upvoted": 3
+  "title": "Blog creado con autenticación JWT",
+  "author": "Carlos Mario",
+  "url": "https://nuevo.com",
+  "likes": 10
 }
+

@@ -38,6 +38,7 @@ const blogSchema = new mongoose.Schema({
     default: 0,
     min: [0, "likes must be 0 or more"],
   },
+  
 user: { 
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User' 
